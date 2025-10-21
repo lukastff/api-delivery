@@ -7,6 +7,7 @@ const deliveriesRoutes = Router();
 const deliveriesController = new DeliveriesController();
 
 deliveriesRoutes.use(ensureAuthenticated, verifyUserAuthorization(["sale"]));
+deliveriesRoutes.get("/", deliveriesController.index);
 deliveriesRoutes.post("/", deliveriesController.create);
 
 export { deliveriesRoutes };
