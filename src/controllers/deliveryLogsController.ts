@@ -4,6 +4,24 @@ import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/AppError";
 
 class DeliveryLogsController {
+  async show(req: Request, res: Response, next: NextFunction) {
+    const paramsSchema = z.object({
+      delivery_id: z.string().uuid(),
+    });
+
+    const { delivery_id } = paramsSchema.parse(req.params);
+
+    const delivery = await prisma.delivery.findUnique({
+      where: { id: delivery_id },
+    });
+
+    if (req.user?.role === "customer" && req.user.id !== delivery?.userId) {
+      throw new AppError("The user can only view their deliveries", 401);
+    }
+
+    return res.json(delivery);
+  }
+
   async create(req: Request, res: Response, next: NextFunction) {
     const bodySchema = z.object({
       delivery_id: z.string().uuid(),

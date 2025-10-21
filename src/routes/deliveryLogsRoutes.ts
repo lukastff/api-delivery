@@ -7,6 +7,12 @@ import { verifyUserAuthorization } from "@/middlewares/verifyUserAuthorization";
 const deliveryLogsRoutes = Router();
 const deliveryLogsController = new DeliveryLogsController();
 
+deliveryLogsRoutes.get(
+  "/:delivery_id/show",
+  ensureAuthenticated,
+  verifyUserAuthorization(["sale", "customer"]),
+  deliveryLogsController.show
+);
 deliveryLogsRoutes.post(
   "/",
   ensureAuthenticated,
