@@ -3,6 +3,8 @@ import { prisma } from "@/database/prisma";
 import { compare } from "bcrypt";
 import { z } from "zod";
 import { AppError } from "@/utils/AppError";
+import { authConfig } from "@/configs/auth";
+import { sign } from "jsonwebtoken";
 
 class SessionsController {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +27,14 @@ class SessionsController {
       throw new AppError("Email or Password incorrect", 401);
     }
 
-    return res.json({ message: "Hello World" });
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = sign({ role: user.role ?? "customer" }, secret, {
+      subject: user.id,
+      expiresIn,
+    });
+
+    return res.json({ token });
   }
 }
 
