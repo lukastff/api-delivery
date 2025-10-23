@@ -2,10 +2,14 @@
   "name": "api-delivery",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts",
     "test:dev": "npx jest --watchAll --runInBand",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "start": "node --env-file=.env build/server.js"
   },
   "author": "Lucas Tavares",
   "license": "ISC",
